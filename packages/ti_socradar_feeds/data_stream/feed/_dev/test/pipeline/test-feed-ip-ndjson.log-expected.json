@@ -44,7 +44,7 @@
                     "reference": "https://platform.socradar.com"
                 },
                 "indicator": {
-                    "confidence": "High",
+                    "confidence": "Low",
                     "description": "SOCRadar feed: SOCRadar-APT-Recommended-Block-IP",
                     "first_seen": "2026-02-19T10:00:00.000Z",
                     "ip": "203.0.113.50",

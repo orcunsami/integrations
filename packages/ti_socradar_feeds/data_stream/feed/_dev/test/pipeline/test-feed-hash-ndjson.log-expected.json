@@ -44,7 +44,7 @@
                     "reference": "https://platform.socradar.com"
                 },
                 "indicator": {
-                    "confidence": "High",
+                    "confidence": "Low",
                     "description": "SOCRadar feed: SOCRadar-APT-Recommended-Block-Hash",
                     "file": {
                         "hash": {

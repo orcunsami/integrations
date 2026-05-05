@@ -39,7 +39,7 @@
                     "reference": "https://platform.socradar.com"
                 },
                 "indicator": {
-                    "confidence": "High",
+                    "confidence": "Low",
                     "description": "SOCRadar feed: SOCRadar-Recommended-Phishing-Global",
                     "first_seen": "2026-02-15T12:00:00.000Z",
                     "last_seen": "2026-02-20T18:00:00.000Z",

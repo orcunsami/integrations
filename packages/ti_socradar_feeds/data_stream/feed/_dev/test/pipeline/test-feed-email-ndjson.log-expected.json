@@ -39,7 +39,7 @@
                     "reference": "https://platform.socradar.com"
                 },
                 "indicator": {
-                    "confidence": "High",
+                    "confidence": "Low",
                     "description": "SOCRadar feed: SOCRadar-APT-Recommended-Block-Hash",
                     "email": {
                         "address": "bad-actor@evil-example.com"
