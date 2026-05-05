@@ -48,6 +48,7 @@ The SOCRadar Threat Feeds integration collects threat intelligence indicators fr
 | socradar.feed.type | Feed indicator type from SOCRadar (ip, hostname, hash, url, email). | keyword |
 | socradar.feed.value | The indicator value (IP, domain, hash, URL, email). | keyword |
 | tags | List of keywords used to tag each event. | keyword |
+| threat.feed.name | Feed name. | keyword |
 | threat.feed.reference | Feed reference URL. | keyword |
 | threat.indicator.confidence | Indicator confidence level. | keyword |
 | threat.indicator.description | Indicator description. | keyword |
@@ -55,6 +56,7 @@ The SOCRadar Threat Feeds integration collects threat intelligence indicators fr
 | threat.indicator.file.hash.md5 | MD5 file hash indicator. | keyword |
 | threat.indicator.file.hash.sha1 | SHA-1 file hash indicator. | keyword |
 | threat.indicator.file.hash.sha256 | SHA-256 file hash indicator. | keyword |
+| threat.indicator.file.hash.sha512 | SHA-512 file hash indicator. | keyword |
 | threat.indicator.first_seen | The date and time when intelligence source first reported sighting this indicator. | date |
 | threat.indicator.ip | IPv4 or IPv6 address indicator. | ip |
 | threat.indicator.last_seen | The date and time when intelligence source last reported sighting this indicator. | date |
@@ -96,9 +98,12 @@ An example event for `feed` looks as following:
         "feed": {
             "collection_id": "4d7a69ce6e7c49ff8c916da5d7343916",
             "collection_name": "SOCRadar-APT-Recommended-Block-IP",
-            "extra_info": null,
+            "extra_info": {
+                "score": 72.5,
+                "seen_count": 3
+            },
             "first_seen_date": "2026-02-19T10:00:00.000Z",
-            "ioc_expiration_date": "2026-05-27T08:30:00.000Z",
+            "ioc_expiration_date": "2026-05-21T08:30:00.000Z",
             "ioc_expiration_duration": "90d",
             "ioc_expiration_reason": "Expiration set by configuration",
             "latest_seen_date": "2026-02-20T08:30:00.000Z",
