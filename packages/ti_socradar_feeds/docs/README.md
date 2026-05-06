@@ -149,4 +149,3 @@ Check the failure store: `GET .fs-logs-ti_socradar_feeds.feed-*/_count`. The exp
 
 ### Transform shows zero documents
 The `logs-ti_socradar_feeds.latest_ioc-default-0.1.0` transform deduplicates indicators into the `logs-ti_socradar_feeds_latest.feed-*` index. It runs continuously and processes new source documents as they arrive. If `documents_processed` stays at `0` for more than `Interval × 2`, restart the transform from Stack Management → Transforms.
-
