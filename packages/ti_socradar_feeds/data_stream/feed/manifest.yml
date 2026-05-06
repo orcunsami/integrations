@@ -14,8 +14,11 @@ streams:
         multi: false
         required: true
         show_user: true
-        default: 60m
-        description: Duration between collection polling cycles. Supported units for this parameter are h/m/s.
+        default: 5m
+        description: >
+          Duration between collection polling cycles. Supported units for this parameter are h/m/s.
+          Note: each tick polls one collection in round-robin fashion. With the default of 5m and 7 recommended collections, every collection is refreshed roughly every 35 minutes.
+          The first poll occurs after one interval; lower this value for faster initial data, increase it for low-volume environments.
       - name: initial_interval
         type: text
         title: Initial Interval
