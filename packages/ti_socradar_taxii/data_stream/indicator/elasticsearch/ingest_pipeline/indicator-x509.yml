@@ -7,6 +7,8 @@ processors:
         - "(?i:^\\[?x509-certificate:hashes\\.'?MD5'?%{SPACE}=%{SPACE}'%{DATA:_tmp.md5}'\\]?)"
         - "(?i:^\\[?x509-certificate:hashes\\.'?SHA-?1'?%{SPACE}=%{SPACE}'%{DATA:_tmp.sha1}'\\]?)"
         - "(?i:^\\[?x509-certificate:hashes\\.'?SHA-?256'?%{SPACE}=%{SPACE}'%{DATA:_tmp.sha256}'\\]?)"
+        - "(?i:^\\[?x509-certificate:hashes\\.'?SHA-?384'?%{SPACE}=%{SPACE}'%{DATA:_tmp.sha384}'\\]?)"
+        - "(?i:^\\[?x509-certificate:hashes\\.'?SHA-?512'?%{SPACE}=%{SPACE}'%{DATA:_tmp.sha512}'\\]?)"
         - "^\\[?x509-certificate:serial_number%{SPACE}=%{SPACE}'%{DATA:_tmp.serial_number}'\\]?"
         - "^\\[?x509-certificate:signature_algorithm%{SPACE}=%{SPACE}'%{DATA:_tmp.signature_algorithm}'\\]?"
         - "^\\[?x509-certificate:version%{SPACE}=%{SPACE}'%{DATA:_tmp.version_number}'\\]?"
@@ -29,6 +31,14 @@ processors:
       field: threat.indicator.file.hash.sha256
       value: "{{{ _tmp.sha256 }}}"
       if: ctx._tmp?.sha256 != null
+  - append:
+      field: threat.indicator.file.hash.sha384
+      value: "{{{ _tmp.sha384 }}}"
+      if: ctx._tmp?.sha384 != null
+  - append:
+      field: threat.indicator.file.hash.sha512
+      value: "{{{ _tmp.sha512 }}}"
+      if: ctx._tmp?.sha512 != null
   - append:
       field: threat.indicator.x509.serial_number
       value: "{{{ _tmp.serial_number }}}"
@@ -148,6 +158,16 @@ processors:
       field: related.hash
       value: "{{{ _tmp.sha256 }}}"
       if: ctx._tmp?.sha256 != null
+      allow_duplicates: false
+  - append:
+      field: related.hash
+      value: "{{{ _tmp.sha384 }}}"
+      if: ctx._tmp?.sha384 != null
+      allow_duplicates: false
+  - append:
+      field: related.hash
+      value: "{{{ _tmp.sha512 }}}"
+      if: ctx._tmp?.sha512 != null
       allow_duplicates: false
 
   - date:
