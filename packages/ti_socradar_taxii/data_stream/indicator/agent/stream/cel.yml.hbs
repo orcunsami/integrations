@@ -65,6 +65,16 @@ program: |
                 },
             },
             "want_more": false,
+            "next_url": "",
+            "collection_index": 0,
+            "collections": state.collections,
+            "base_url": state.base_url,
+            "username": state.username,
+            "password": state.password,
+            "accept_header": state.accept_header,
+            "content_header": state.content_header,
+            ?"initial_interval": state.?initial_interval,
+            ?"limit": state.?limit,
         }
     :
     state.collections[int(state.collection_index) % state.collections.size()].as(current, {
@@ -85,6 +95,14 @@ program: |
                 "want_more": false,
                 "collection_index": (int(state.collection_index) + 1) % state.collections.size(),
                 "next_url": "",
+                "collections": state.collections,
+                "base_url": state.base_url,
+                "username": state.username,
+                "password": state.password,
+                "accept_header": state.accept_header,
+                "content_header": state.content_header,
+                ?"initial_interval": state.?initial_interval,
+                ?"limit": state.?limit,
             }
         :
         request("GET",
@@ -141,6 +159,13 @@ program: |
                             :
                                 c
                             ),
+                        "base_url": state.base_url,
+                        "username": state.username,
+                        "password": state.password,
+                        "accept_header": state.accept_header,
+                        "content_header": state.content_header,
+                        ?"initial_interval": state.?initial_interval,
+                        ?"limit": state.?limit,
                     }
                 )
             :
@@ -161,6 +186,14 @@ program: |
                     "want_more": false,
                     "next_url": "",
                     "collection_index": (int(state.collection_index) + 1) % state.collections.size(),
+                    "collections": state.collections,
+                    "base_url": state.base_url,
+                    "username": state.username,
+                    "password": state.password,
+                    "accept_header": state.accept_header,
+                    "content_header": state.content_header,
+                    ?"initial_interval": state.?initial_interval,
+                    ?"limit": state.?limit,
                 }
         )
     )

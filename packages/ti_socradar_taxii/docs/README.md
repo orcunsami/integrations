@@ -205,6 +205,7 @@ elastic-agent diagnostics collect
 
 ## Logs reference
 
+
 ### Indicator
 
 **Exported fields**
@@ -267,6 +268,8 @@ elastic-agent diagnostics collect
 | threat.indicator.file.hash.md5 | MD5 hash. | keyword |
 | threat.indicator.file.hash.sha1 | SHA1 hash. | keyword |
 | threat.indicator.file.hash.sha256 | SHA256 hash. | keyword |
+| threat.indicator.file.hash.sha384 | SHA384 hash. | keyword |
+| threat.indicator.file.hash.sha512 | SHA512 hash. | keyword |
 | threat.indicator.file.name | File name. | keyword |
 | threat.indicator.first_seen | The date and time when intelligence source first reported sighting this indicator. | date |
 | threat.indicator.ip | Indicator IP address. | ip |
@@ -279,6 +282,7 @@ elastic-agent diagnostics collect
 | threat.indicator.registry.path | Windows registry path. | keyword |
 | threat.indicator.registry.value | Windows registry value. | keyword |
 | threat.indicator.type | Type of indicator. | keyword |
+| threat.indicator.url.domain | Domain extracted from a domain-name indicator. | keyword |
 | threat.indicator.url.full | Full URL. | keyword |
 | threat.indicator.url.original | Original URL. | wildcard |
 | threat.indicator.x509.issuer.common_name | X.509 issuer common name. | keyword |
