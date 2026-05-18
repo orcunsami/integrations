@@ -1,9 +1,9 @@
 config_version: 2
 interval: {{interval}}
-{{#if enable_request_tracer}}
-resource.tracer.filename: "../../logs/cel/http-request-trace-*.ndjson"
-resource.tracer.maxbackups: 5
-{{/if}}
+resource.tracer:
+  enabled: {{enable_request_tracer}}
+  filename: "../../logs/cel/http-request-trace-*.ndjson"
+  maxbackups: 5
 {{#if proxy_url}}
 resource.proxy_url: {{proxy_url}}
 {{/if}}
@@ -35,62 +35,71 @@ state:
 redact:
   fields:
     - api_key
-program: |
-  state.collections[state.collection_index].as(current_collection, {
-    "cid": string(current_collection.id),
-    "cname": string(current_collection.?name.orValue(string(current_collection.id))),
-    "has_checkpoint": has(current_collection.last_processed_date) && current_collection.last_processed_date != "",
-    "last_date": (
-      has(current_collection.last_processed_date) && current_collection.last_processed_date != ""
-      ? string(current_collection.last_processed_date)
-      : ""
-    ),
-  }).as(cc,
-    request("GET", state.url + "/api/threat/intelligence/feed_list/" + cc.cid + ".json?" + {
-      "key": [state.api_key],
-      "v": ["2"],
-    }.format_query()).do_request().as(resp,
-      int(resp.StatusCode) == 200 ?
+program: |-
+  state.collections[state.collection_index].as(current_collection,
+    {
+      "cid": string(current_collection.id),
+      "cname": string(current_collection.?name.orValue(string(current_collection.id))),
+      "has_checkpoint": has(current_collection.last_processed_date) && current_collection.last_processed_date != "",
+      "last_date": (has(current_collection.last_processed_date) && current_collection.last_processed_date != "") ?
+        string(current_collection.last_processed_date)
+      :
+        "",
+    }
+  ).as(cc,
+    request(
+      "GET",
+      state.url + "/api/threat/intelligence/feed_list/" + cc.cid + ".json?" + {
+        "key": [state.api_key],
+        "v": ["2"],
+      }.format_query()
+    ).do_request().as(resp,
+      (int(resp.StatusCode) == 200) ?
         bytes(resp.Body).decode_json().as(body,
           body.filter(item,
-            has(item.feed) && size(string(item.feed)) > 0 &&
-            (
-              !cc.has_checkpoint ? (
-                has(item.latest_seen_date) && size(string(item.latest_seen_date)) > 0
-                  ? string(item.latest_seen_date) >= (now - duration(state.initial_interval)).format("2006-01-02 15:04:05")
-                  : true
-              ) :
-              has(item.latest_seen_date) && size(string(item.latest_seen_date)) > 0
-              ? string(item.latest_seen_date) > cc.last_date
-              : true
+            has(item.feed) && size(string(item.feed)) > 0 && (
+              !cc.has_checkpoint ?
+                (
+                  (has(item.latest_seen_date) && size(string(item.latest_seen_date)) > 0) ?
+                    (string(item.latest_seen_date) >= (now - duration(state.initial_interval)).format("2006-01-02 15:04:05"))
+                  :
+                    true
+                )
+              : (has(item.latest_seen_date) && size(string(item.latest_seen_date)) > 0) ?
+                (string(item.latest_seen_date) > cc.last_date)
+              :
+                true
             )
-          ).map(item, {
-            "message": item.encode_json(),
-            "_collection_id": cc.cid,
-            "_collection_name": cc.cname,
-          }).as(filtered_events, {
-            "events": filtered_events,
-            "want_more": int(state.collection_index) + 1 < size(state.collections),
-            "collection_index": int(state.collection_index) + 1 < size(state.collections)
-              ? int(state.collection_index) + 1
-              : 0,
-            "collections": state.collections.map(c,
-              string(c.id) == cc.cid
-              ? {
-                  "id": cc.cid,
-                  "name": cc.cname,
-                  "last_processed_date": now.format("2006-01-02 15:04:05"),
-                }
-              : {
-                  "id": string(c.id),
-                  "name": string(c.?name.orValue(string(c.id))),
-                  "last_processed_date": has(c.last_processed_date) ? string(c.last_processed_date) : "",
-                }
-            ),
-            "api_key": string(state.api_key),
-            "url": string(state.url),
-            "initial_interval": string(state.initial_interval),
-          })
+          ).map(item,
+            {
+              "message": item.encode_json(),
+              "_collection_id": cc.cid,
+              "_collection_name": cc.cname,
+            }
+          ).as(filtered_events,
+            {
+              "events": filtered_events,
+              "want_more": int(state.collection_index) + 1 < size(state.collections),
+              "collection_index": (int(state.collection_index) + 1) % size(state.collections),
+              "collections": state.collections.map(c,
+                (string(c.id) == cc.cid) ?
+                  {
+                    "id": cc.cid,
+                    "name": cc.cname,
+                    "last_processed_date": now.format("2006-01-02 15:04:05"),
+                  }
+                :
+                  {
+                    "id": string(c.id),
+                    "name": string(c.?name.orValue(string(c.id))),
+                    "last_processed_date": has(c.last_processed_date) ? string(c.last_processed_date) : "",
+                  }
+              ),
+              "api_key": string(state.api_key),
+              "url": string(state.url),
+              "initial_interval": string(state.initial_interval),
+            }
+          )
         )
       :
         {
@@ -99,7 +108,7 @@ program: |
               "code": string(resp.StatusCode),
               "id": string(resp.Status),
               "message": "GET:" + (
-                size(bytes(resp.Body)) != 0 ?
+                (size(bytes(resp.Body)) != 0) ?
                   string(resp.Body)
                 :
                   string(resp.Status) + " (" + string(resp.StatusCode) + ")"
@@ -107,14 +116,14 @@ program: |
             },
           },
           "want_more": int(state.collection_index) + 1 < size(state.collections),
-          "collection_index": int(state.collection_index) + 1 < size(state.collections)
-            ? int(state.collection_index) + 1
-            : 0,
-          "collections": state.collections.map(c, {
-            "id": string(c.id),
-            "name": string(c.?name.orValue(string(c.id))),
-            "last_processed_date": has(c.last_processed_date) ? string(c.last_processed_date) : "",
-          }),
+          "collection_index": (int(state.collection_index) + 1) % size(state.collections),
+          "collections": state.collections.map(c,
+            {
+              "id": string(c.id),
+              "name": string(c.?name.orValue(string(c.id))),
+              "last_processed_date": has(c.last_processed_date) ? string(c.last_processed_date) : "",
+            }
+          ),
           "api_key": string(state.api_key),
           "url": string(state.url),
           "initial_interval": string(state.initial_interval),
