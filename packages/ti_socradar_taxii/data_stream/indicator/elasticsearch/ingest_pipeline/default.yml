@@ -161,24 +161,26 @@ processors:
       ignore_missing: true
 
   ## TLP mapping from STIX marking-definition references
+  # TLP marking-definition IDs are defined by the OASIS STIX 2.1 specification.
+  # See: https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_yd3ar14ekwrs
   - script:
       tag: script_tlp_mapping
       lang: painless
       if: ctx.stix?.object_marking_refs != null
       description: Map STIX TLP marking-definition IDs to TLP levels.
-      source: >
-        def tlp_map = [
-          'marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9': 'WHITE',
-          'marking-definition--34098fce-860f-48ae-8e50-ebd3cc5e41da': 'GREEN',
-          'marking-definition--f88d31f6-486f-44da-b317-01333bde0b82': 'AMBER',
+      params:
+        tlp_map:
+          'marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9': 'WHITE'
+          'marking-definition--34098fce-860f-48ae-8e50-ebd3cc5e41da': 'GREEN'
+          'marking-definition--f88d31f6-486f-44da-b317-01333bde0b82': 'AMBER'
           'marking-definition--5e57c739-391a-4eb3-b6be-7d15ca92d5ed': 'RED'
-        ];
+      source: >
         for (def ref : ctx.stix.object_marking_refs) {
-          if (tlp_map.containsKey(ref)) {
+          if (params.tlp_map.containsKey(ref)) {
             if (ctx.threat.indicator.marking == null) {
               ctx.threat.indicator.marking = new HashMap();
             }
-            ctx.threat.indicator.marking.tlp = tlp_map[ref];
+            ctx.threat.indicator.marking.tlp = params.tlp_map[ref];
             break;
           }
         }
