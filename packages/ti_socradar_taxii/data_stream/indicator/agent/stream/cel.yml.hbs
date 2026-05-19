@@ -39,7 +39,6 @@ state:
   collections:
     {{collections_config}}
   collection_index: 0
-  want_more: false
   next_url: ""
 
 redact:
@@ -108,7 +107,7 @@ program: |-
       :
         request(
           "GET",
-          (state.?want_more.orValue(false) && state.?next_url.orValue("") != "") ?
+          (state.?next_url.orValue("") != "") ?
             state.next_url
           :
             state.base_url.trim_right("/") + "/" + cc.api_root + "/collections/" + cc.cid + "/objects/?" + {
@@ -147,21 +146,23 @@ program: |-
                 :
                   "",
                 "collection_index": (has(body.next) && body.next != null && string(body.next) != "") ?
-                  int(state.collection_index)
+                  state.collection_index
                 :
                   (int(state.collection_index) + 1) % state.collections.size(),
                 "collections": (has(body.next) && body.next != null && string(body.next) != "") ?
                   state.collections
                 :
-                  state.collections.map(c, (string(c.?collection_id.orValue("")) == cc.cid &&
-                  string(c.?api_root.orValue("radar_alpha")) == cc.api_root) ?
-                    {
-                      "api_root": cc.api_root,
-                      "collection_id": cc.cid,
-                      "last_added_after": (resp.Header[?"X-Taxii-Date-Added-Last"].optMap(v, string(v[0]))).orValue(now().format(time_layout.RFC3339)),
-                    }
-                  :
-                    c
+                  state.collections.map(c,
+                    (
+                      string(c.?collection_id.orValue("")) == cc.cid && string(c.?api_root.orValue("radar_alpha")) == cc.api_root
+                    ) ?
+                      {
+                        "api_root": cc.api_root,
+                        "collection_id": cc.cid,
+                        "last_added_after": (resp.Header[?"X-Taxii-Date-Added-Last"].optMap(v, string(v[0]))).orValue(now().format(time_layout.RFC3339)),
+                      }
+                    :
+                      c
                   ),
                 "base_url": state.base_url,
                 "username": state.username,
