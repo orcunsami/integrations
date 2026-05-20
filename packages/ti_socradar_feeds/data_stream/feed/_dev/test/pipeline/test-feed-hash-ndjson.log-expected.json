@@ -20,7 +20,7 @@
                     "d41d8cd98f00b204e9800998ecf8427e"
                 ]
             },
-            "socradar": {
+            "ti_socradar_feeds": {
                 "feed": {
                     "collection_id": "0cb06558728b4dc296019c93b78360d1",
                     "collection_name": "SOCRadar-APT-Recommended-Block-Hash",

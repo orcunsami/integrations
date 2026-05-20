@@ -15,7 +15,7 @@
                     "indicator"
                 ]
             },
-            "socradar": {
+            "ti_socradar_feeds": {
                 "feed": {
                     "collection_id": "03cc11380b5d4a77a0d0cc2a7c568230",
                     "collection_name": "SOCRadar-Recommended-Phishing-Global",

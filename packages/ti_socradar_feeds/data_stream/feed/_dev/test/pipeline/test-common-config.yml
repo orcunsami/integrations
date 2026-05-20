@@ -5,4 +5,4 @@ fields:
     - forwarded
     - ti_socradar_feeds-feed
 dynamic_fields:
-  socradar.feed.ioc_expiration_date: "^.*$"
+  ti_socradar_feeds.feed.ioc_expiration_date: "^.*$"

@@ -39,54 +39,54 @@ processors:
   - rename:
       field: _collection_id
       tag: rename_collection_id
-      target_field: socradar.feed.collection_id
+      target_field: ti_socradar_feeds.feed.collection_id
       ignore_missing: true
   - rename:
       field: _collection_name
       tag: rename_collection_name
-      target_field: socradar.feed.collection_name
+      target_field: ti_socradar_feeds.feed.collection_name
       ignore_missing: true
   # Fallback: extract from parsed JSON (for pipeline tests where CEL metadata fields are not available)
   - rename:
       field: json._collection_metadata.collection_id
       tag: rename_collection_id_fallback
-      target_field: socradar.feed.collection_id
+      target_field: ti_socradar_feeds.feed.collection_id
       ignore_missing: true
-      if: ctx.socradar?.feed?.collection_id == null
+      if: ctx.ti_socradar_feeds?.feed?.collection_id == null
   - rename:
       field: json._collection_metadata.collection_name
       tag: rename_collection_name_fallback
-      target_field: socradar.feed.collection_name
+      target_field: ti_socradar_feeds.feed.collection_name
       ignore_missing: true
-      if: ctx.socradar?.feed?.collection_name == null
+      if: ctx.ti_socradar_feeds?.feed?.collection_name == null
   - remove:
       field: json._collection_metadata
       tag: remove_collection_metadata
       ignore_missing: true
   - set:
-      field: socradar.feed.value
+      field: ti_socradar_feeds.feed.value
       tag: set_feed_value
       copy_from: json.feed
       ignore_empty_value: true
   - set:
-      field: socradar.feed.type
+      field: ti_socradar_feeds.feed.type
       tag: set_feed_type
       copy_from: json.feed_type
       ignore_empty_value: true
   - set:
-      field: socradar.feed.maintainer_name
+      field: ti_socradar_feeds.feed.maintainer_name
       tag: set_feed_maintainer
       copy_from: json.maintainer_name
       ignore_empty_value: true
   - set:
-      field: socradar.feed.extra_info
+      field: ti_socradar_feeds.feed.extra_info
       tag: set_feed_extra_info
       copy_from: json.extra_info
       if: ctx.json?.extra_info != null
   - date:
       field: json.first_seen_date
       tag: date_parse_first_seen
-      target_field: socradar.feed.first_seen_date
+      target_field: ti_socradar_feeds.feed.first_seen_date
       formats:
         - ISO8601
         - "yyyy-MM-dd'T'HH:mm:ss"
@@ -95,7 +95,7 @@ processors:
   - date:
       field: json.latest_seen_date
       tag: date_parse_latest_seen
-      target_field: socradar.feed.latest_seen_date
+      target_field: ti_socradar_feeds.feed.latest_seen_date
       formats:
         - ISO8601
         - "yyyy-MM-dd'T'HH:mm:ss"
@@ -133,8 +133,8 @@ processors:
       description: Map SOCRadar score to ECS threat.indicator.confidence.
       source: |
         double score = -1;
-        if (ctx.socradar?.feed?.extra_info?.score != null) {
-          score = ((Number) ctx.socradar.feed.extra_info.score).doubleValue();
+        if (ctx.ti_socradar_feeds?.feed?.extra_info?.score != null) {
+          score = ((Number) ctx.ti_socradar_feeds.feed.extra_info.score).doubleValue();
         }
         if (score < 0) {
           ctx.threat.indicator.confidence = 'Low';
@@ -184,10 +184,10 @@ processors:
       lang: painless
       tag: script_resolve_indicator_type
       description: Resolve feed_type to threat.indicator type and extract indicator value.
-      if: ctx.socradar?.feed?.value != null && ctx.socradar?.feed?.type != null
+      if: ctx.ti_socradar_feeds?.feed?.value != null && ctx.ti_socradar_feeds?.feed?.type != null
       source: |
-        def feedType = ctx.socradar.feed.type.toLowerCase();
-        def value = ctx.socradar.feed.value;
+        def feedType = ctx.ti_socradar_feeds.feed.type.toLowerCase();
+        def value = ctx.ti_socradar_feeds.feed.value;
 
         if (ctx.threat == null) ctx.threat = new HashMap();
         if (ctx.threat.indicator == null) ctx.threat.indicator = new HashMap();
@@ -247,8 +247,8 @@ processors:
   - set:
       field: threat.indicator.description
       tag: set_indicator_description
-      value: "SOCRadar feed: {{socradar.feed.collection_name}}"
-      if: ctx.socradar?.feed?.collection_name != null
+      value: "SOCRadar feed: {{ti_socradar_feeds.feed.collection_name}}"
+      if: ctx.ti_socradar_feeds?.feed?.collection_name != null
   - script:
       lang: painless
       tag: script_ioc_expiration
@@ -269,16 +269,16 @@ processors:
         } else {
           expiry = _now.plusDays(90);
         }
-        if (ctx.socradar == null) ctx.socradar = new HashMap();
-        if (ctx.socradar.feed == null) ctx.socradar.feed = new HashMap();
-        ctx.socradar.feed.ioc_expiration_date = expiry;
-        ctx.socradar.feed.ioc_expiration_duration = ctx._conf.ioc_expiration_duration;
-        ctx.socradar.feed.ioc_expiration_reason = 'Expiration set by configuration';
+        if (ctx.ti_socradar_feeds == null) ctx.ti_socradar_feeds = new HashMap();
+        if (ctx.ti_socradar_feeds.feed == null) ctx.ti_socradar_feeds.feed = new HashMap();
+        ctx.ti_socradar_feeds.feed.ioc_expiration_date = expiry;
+        ctx.ti_socradar_feeds.feed.ioc_expiration_duration = ctx._conf.ioc_expiration_duration;
+        ctx.ti_socradar_feeds.feed.ioc_expiration_reason = 'Expiration set by configuration';
   - fingerprint:
       fields:
-        - socradar.feed.collection_id
-        - socradar.feed.value
-        - socradar.feed.type
+        - ti_socradar_feeds.feed.collection_id
+        - ti_socradar_feeds.feed.value
+        - ti_socradar_feeds.feed.type
       target_field: _id
       tag: fingerprint_feed_indicator
       method: SHA-256

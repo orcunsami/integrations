@@ -1,4 +1,4 @@
-- name: socradar
+- name: ti_socradar_feeds
   type: group
   fields:
     - name: feed
@@ -49,62 +49,32 @@
           description: >
             Reason for IOC expiration setting.
 - name: threat.feed.name
-  type: keyword
-  description: >
-    Feed name.
+  external: ecs
 - name: threat.feed.reference
-  type: keyword
-  description: >
-    Feed reference URL.
+  external: ecs
 - name: threat.indicator.type
-  type: keyword
-  description: >
-    Type of indicator (ipv4-addr, domain-name, file, url, email-addr).
+  external: ecs
 - name: threat.indicator.confidence
-  type: keyword
-  description: >
-    Indicator confidence level.
+  external: ecs
 - name: threat.indicator.description
-  type: keyword
-  description: >
-    Indicator description.
+  external: ecs
 - name: threat.indicator.provider
-  type: keyword
-  description: >
-    Indicator provider name.
+  external: ecs
 - name: threat.indicator.ip
-  type: ip
-  description: >
-    IPv4 or IPv6 address indicator.
+  external: ecs
 - name: threat.indicator.url.domain
-  type: keyword
-  description: >
-    Domain name indicator.
+  external: ecs
 - name: threat.indicator.url.full
-  type: wildcard
-  description: >
-    Full URL indicator.
+  external: ecs
 - name: threat.indicator.url.original
-  type: wildcard
-  description: >
-    Original URL indicator value.
+  external: ecs
 - name: threat.indicator.email.address
-  type: keyword
-  description: >
-    Email address indicator.
+  external: ecs
 - name: threat.indicator.file.hash.md5
-  type: keyword
-  description: >
-    MD5 file hash indicator.
+  external: ecs
 - name: threat.indicator.file.hash.sha1
-  type: keyword
-  description: >
-    SHA-1 file hash indicator.
+  external: ecs
 - name: threat.indicator.file.hash.sha256
-  type: keyword
-  description: >
-    SHA-256 file hash indicator.
+  external: ecs
 - name: threat.indicator.file.hash.sha512
-  type: keyword
-  description: >
-    SHA-512 file hash indicator.
+  external: ecs

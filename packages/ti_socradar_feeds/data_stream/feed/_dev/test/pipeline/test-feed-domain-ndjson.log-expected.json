@@ -20,7 +20,7 @@
                     "malicious-example.com"
                 ]
             },
-            "socradar": {
+            "ti_socradar_feeds": {
                 "feed": {
                     "collection_id": "9079dcc2f96e4835bb807026d4cdcc86",
                     "collection_name": "SOCRadar-APT-Recommended-Block-Domain",

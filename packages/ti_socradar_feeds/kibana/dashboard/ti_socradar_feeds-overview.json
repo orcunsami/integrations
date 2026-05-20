@@ -167,7 +167,7 @@
                             "emptyAsNull": true
                           },
                           "scale": "ratio",
-                          "sourceField": "socradar.feed.value"
+                          "sourceField": "ti_socradar_feeds.feed.value"
                         }
                       },
                       "ignoreGlobalFilters": false,
@@ -243,7 +243,7 @@
                             "emptyAsNull": true
                           },
                           "scale": "ratio",
-                          "sourceField": "socradar.feed.collection_name"
+                          "sourceField": "ti_socradar_feeds.feed.collection_name"
                         }
                       },
                       "ignoreGlobalFilters": false,
@@ -529,7 +529,7 @@
                             "size": 10
                           },
                           "scale": "ordinal",
-                          "sourceField": "socradar.feed.collection_name"
+                          "sourceField": "ti_socradar_feeds.feed.collection_name"
                         },
                         "16ab324d-7854-4905-980b-4931bf9a6e12": {
                           "customLabel": true,
@@ -803,7 +803,7 @@
                             "size": 100
                           },
                           "scale": "ordinal",
-                          "sourceField": "socradar.feed.value"
+                          "sourceField": "ti_socradar_feeds.feed.value"
                         },
                         "de07ef6c-4643-4fcb-b7c5-151708a21e6d": {
                           "customLabel": true,
@@ -855,7 +855,7 @@
                             "size": 10
                           },
                           "scale": "ordinal",
-                          "sourceField": "socradar.feed.collection_name"
+                          "sourceField": "ti_socradar_feeds.feed.collection_name"
                         },
                         "5a632e03-1313-429f-bd6b-83411c140686": {
                           "customLabel": true,
