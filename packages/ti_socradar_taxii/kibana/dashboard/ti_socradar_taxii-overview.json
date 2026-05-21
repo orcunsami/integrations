@@ -70,7 +70,7 @@
               "events": []
             }
           },
-          "hidePanelTitles": true,
+          "hidePanelTitles": false,
           "syncColors": false,
           "syncCursor": true,
           "syncTooltips": false,
@@ -151,7 +151,7 @@
               "events": []
             }
           },
-          "hidePanelTitles": true,
+          "hidePanelTitles": false,
           "syncColors": false,
           "syncCursor": true,
           "syncTooltips": false,
@@ -232,7 +232,7 @@
               "events": []
             }
           },
-          "hidePanelTitles": true,
+          "hidePanelTitles": false,
           "syncColors": false,
           "syncCursor": true,
           "syncTooltips": false,
@@ -313,7 +313,7 @@
               "events": []
             }
           },
-          "hidePanelTitles": true,
+          "hidePanelTitles": false,
           "syncColors": false,
           "syncCursor": true,
           "syncTooltips": false,
