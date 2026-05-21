@@ -5,5 +5,5 @@ fields:
     - forwarded
     - ti_socradar_taxii-indicator
 dynamic_fields:
-  stix.ioc_expiration_date: "^.*$"
+  ti_socradar_taxii.stix.ioc_expiration_date: "^.*$"
   event.ingested: "^.*$"

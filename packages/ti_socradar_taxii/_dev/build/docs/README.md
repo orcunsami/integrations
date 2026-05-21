@@ -95,12 +95,12 @@ The following STIX indicator types are supported and mapped to ECS fields:
 | `created` | `threat.indicator.first_seen` | When the indicator was first created |
 | `modified` | `threat.indicator.modified_at` | When the indicator was last modified |
 | `valid_from` | `threat.indicator.first_seen` | Start of indicator validity |
-| `valid_until` | `stix.ioc_expiration_date` | End of indicator validity |
+| `valid_until` | `ti_socradar_taxii.stix.ioc_expiration_date` | End of indicator validity |
 | `confidence` | `threat.indicator.confidence` | Confidence score (0-100) mapped to Low/Medium/High |
 | `description` | `threat.indicator.description` | Human-readable description |
 | `labels` | `tags` | STIX labels converted to tags |
-| `pattern` | `stix.pattern` | Original STIX pattern |
-| `spec_version` | `stix.spec_version` | STIX specification version |
+| `pattern` | `ti_socradar_taxii.stix.pattern` | Original STIX pattern |
+| `spec_version` | `ti_socradar_taxii.stix.spec_version` | STIX specification version |
 
 ### Confidence Mapping
 
@@ -120,16 +120,16 @@ By default, indicators expire 90 days after their last seen timestamp. This beha
 
 - If `valid_until` is present in the STIX object, it is used as the expiration date.
 - If `valid_until` is not present, the expiration is calculated as: `modified + ioc_expiration_duration`.
-- Expired indicators are marked in the `stix.ioc_expiration_reason` field.
+- Expired indicators are marked in the `ti_socradar_taxii.stix.ioc_expiration_reason` field.
 
 ## Transforms
 
 This integration includes a `latest_ioc` transform that:
 
-- Runs every 30 seconds
-- Maintains the latest unique IOC per `event.dataset` and `stix.id`
+- Runs every 60 seconds
+- Maintains the latest unique IOC per `event.dataset` and `ti_socradar_taxii.stix.id`
 - Stores results in `logs-ti_socradar_taxii_latest.indicator`
-- Retains data for 24 hours
+- Removes indicators 1 minute after their `ti_socradar_taxii.stix.ioc_expiration_date`
 
 Use the transform index for:
 - Indicator match rules
@@ -152,7 +152,7 @@ KPI metrics:
 
 Visualizations:
 - **Indicators by Type**: Donut chart breakdown (ipv4-addr, file, url, domain-name, etc.)
-- **Indicators by Feed Source**: Donut chart breakdown by `stix.threat_feed_source_name`
+- **Indicators by Feed Source**: Donut chart breakdown by `ti_socradar_taxii.stix.threat_feed_source_name`
 - **Indicators by Confidence**: Donut chart breakdown by ECS confidence (Low/Medium/High)
 - **Indicators Over Time**: Area chart, time series of indicator ingestion split by type
 - **Feed Source Breakdown**: Top 20 feed sources table with document counts
@@ -193,8 +193,8 @@ elastic-agent diagnostics collect
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Indicator not parsed | Unsupported STIX type | Check `stix.type` field in logs |
-| Pattern extraction failed | Complex pattern | Check `stix.pattern` format |
+| Indicator not parsed | Unsupported STIX type | Check `ti_socradar_taxii.stix.type` field in logs |
+| Pattern extraction failed | Complex pattern | Check `ti_socradar_taxii.stix.pattern` format |
 | Missing ECS fields | Null values in STIX | Check STIX object completeness |
 
 ## Reference
