@@ -178,7 +178,7 @@ The `latest_ioc` transform runs every 60 seconds and indexes one document per un
 | ti_socradar_taxii.stix.extensions | Specifies any extensions of the object, as a dictionary. | flattened |
 | ti_socradar_taxii.stix.external_references | The external_references property specifies a list of external references which refers to non-STIX information. This property is used to provide one or more URLs, descriptions, or IDs to records in other systems. | flattened |
 | ti_socradar_taxii.stix.id | The ID of the indicator. | keyword |
-| ti_socradar_taxii.stix.indicator_types |  | keyword |
+| ti_socradar_taxii.stix.indicator_types | The STIX indicator types that categorize this indicator, for example malicious-activity. | keyword |
 | ti_socradar_taxii.stix.ioc_expiration_date | The expiration date of the indicator. It can be defined from the source event, by the revoked or valid_until fields, or from the integration configuration by ioc_expiration_duration. | date |
 | ti_socradar_taxii.stix.ioc_expiration_duration | The configured expiration duration for the indicator. | keyword |
 | ti_socradar_taxii.stix.ioc_expiration_reason | Reason why the indicator is expired. Defined by the integration in the ingest pipeline. | keyword |
